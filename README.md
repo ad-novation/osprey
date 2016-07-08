@@ -44,6 +44,20 @@ and no other means of authentication are supported at this time.
 
 Just move the downloaded binary to `/usr/local/bin/osprey`. That should be it.
 
+With Wget:
+
+```sh
+sudo wget -O /usr/local/bin/osprey "https://github.com/mobilecashout/osprey/blob/master/dist/osprey?raw=true" && \
+    sudo chmod +x /usr/local/bin/osprey
+```
+
+With Curl:
+
+```sh
+sudo curl -L -o /usr/local/bin/osprey "https://github.com/mobilecashout/osprey/blob/master/dist/osprey?raw=true" && \
+    sudo chmod +x /usr/local/bin/osprey
+```
+
 ### Deployment configuration
 
 Osprey deployment configuration is stored in JSON files, each configuration file can contain multiple projects.
