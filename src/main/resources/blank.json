@@ -1,0 +1,51 @@
+[
+    {
+        "name": "MY PROJECT",
+        "options": {
+            "check_host_keys": true
+        },
+        "define": {
+            "repository": "GIT REPOSITORY URL"
+        },
+        "environments": {
+            "production": {
+                "define": {
+                    "branch": "BRANCH"
+                },
+                "targets": [
+                    {
+                        "user": "{user}",
+                        "host": "example.com",
+                        "port": 22,
+                        "root": "/var/www/test.com/"
+                    }
+                ]
+            }
+        },
+        "build": {
+            "success": [],
+            "failure": [],
+            "local": {
+                "prepare": [
+                    "@clone {repository} {branch}",
+                    "@cleanup",
+                    "@package"
+                ],
+                "success": [],
+                "failure": []
+            },
+            "remote": {
+                "prepare": [
+                    "@pushArtifact",
+                    "@removeAllExcept 3"
+                ],
+                "success": [
+                    "@release"
+                ],
+                "failure": [
+                    "@rollback"
+                ]
+            }
+        }
+    }
+]
