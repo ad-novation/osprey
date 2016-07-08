@@ -11,7 +11,19 @@ to open an issue if they do.
 
 ## Usage
 
-See `osprey help`.
+Available commands:
+
+```
+    help: Display command usage information
+    init: Create a blank osprey.json file in current working directory
+    deploy: deploy given project to indicated environment
+            <project>           : required, name of the project to deploy.
+            <environment>       : required, name of environment to deploy to.
+            [--config=file.json]: optional, configuration file path. Defaults to osprey.json.
+            [--verbose]         : optional, display debug output. Note, that deployment log will always record all log output anyway. Defaults to false.
+            [--assume-yes]      : optional, don't prompt for any confirmations. Defaults to false.
+            [--debug]           : optional, pause after before execution step
+```
 
 ### Download
 
