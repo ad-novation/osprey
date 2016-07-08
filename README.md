@@ -2,8 +2,9 @@
 
 Simple application deployment tool written in Java with Capistrano compatible layout.
 
-
 ![Osprey](./deployment/osprey.medium.png "Osprey")
+
+[![Build Status](https://travis-ci.org/mobilecashout/osprey.svg?branch=master)](https://travis-ci.org/mobilecashout/osprey)
 
 **Disclaimer:** although stable and used in production for handful of projects,
 this software is still very rough around the edges. Things can break. You are encouraged
