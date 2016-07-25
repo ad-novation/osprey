@@ -16,11 +16,13 @@
 
 package com.mobilecashout.osprey.plugin.plugins;
 
-import com.mobilecashout.osprey.plugin.PluginInterface;
 import com.mobilecashout.osprey.deployer.DeploymentAction;
 import com.mobilecashout.osprey.deployer.DeploymentActionError;
 import com.mobilecashout.osprey.deployer.DeploymentContext;
 import com.mobilecashout.osprey.deployer.DeploymentPlan;
+import com.mobilecashout.osprey.plugin.PluginInterface;
+import com.mobilecashout.osprey.plugin.RolesUtil;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class RemoteShellPlugin implements PluginInterface {
     @Override
@@ -38,17 +40,28 @@ public class RemoteShellPlugin implements PluginInterface {
     @Override
     public DeploymentAction[] actionFromCommand(String command, DeploymentPlan deploymentPlan, DeploymentContext deploymentContext) {
         return new DeploymentAction[]{
-                new DeploymentAction() {
-                    @Override
-                    public String getDescription() {
-                        return String.format("Remote shell command: %s", deploymentContext.substitutor().replace(command));
-                    }
-
-                    @Override
-                    public void execute(DeploymentContext context) throws DeploymentActionError {
-                        context.remoteClient().execute(command, deploymentContext);
-                    }
-                }
+                new RemoteShellAction(command, deploymentContext)
         };
+    }
+
+    private static class RemoteShellAction implements DeploymentAction {
+
+        private final ImmutablePair<String, String[]> commandRolePair;
+        private final DeploymentContext deploymentContext;
+
+        RemoteShellAction(String command, DeploymentContext deploymentContext) {
+            this.deploymentContext = deploymentContext;
+            this.commandRolePair = RolesUtil.parseCommandRoles(deploymentContext.substitutor().replace(command));
+        }
+
+        @Override
+        public String getDescription() {
+            return String.format("Remote shell command: %s on [%s]", commandRolePair.getLeft(), String.join(",", (CharSequence[]) commandRolePair.getRight()));
+        }
+
+        @Override
+        public void execute(DeploymentContext context) throws DeploymentActionError {
+            context.remoteClient().execute(commandRolePair.getLeft(), deploymentContext, commandRolePair.getRight());
+        }
     }
 }

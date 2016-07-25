@@ -17,7 +17,8 @@
                         "user": "{user}",
                         "host": "example.com",
                         "port": 22,
-                        "root": "/var/www/test.com/"
+                        "root": "/var/www/test.com/",
+                        "roles": ["all"]
                     }
                 ]
             }

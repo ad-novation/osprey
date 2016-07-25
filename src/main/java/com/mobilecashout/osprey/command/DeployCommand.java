@@ -18,10 +18,10 @@ package com.mobilecashout.osprey.command;
 
 import com.google.inject.Inject;
 import com.mobilecashout.osprey.Osprey;
+import com.mobilecashout.osprey.exception.BaseException;
 import com.rfksystems.commander.Command;
 import com.rfksystems.commander.Input;
 import com.rfksystems.commander.exception.RuntimeArgumentException;
-import com.mobilecashout.osprey.exception.BaseException;
 import org.apache.logging.log4j.Logger;
 
 import java.io.PrintStream;

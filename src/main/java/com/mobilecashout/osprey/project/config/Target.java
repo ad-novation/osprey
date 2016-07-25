@@ -18,6 +18,8 @@ package com.mobilecashout.osprey.project.config;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Arrays;
+
 public class Target {
     @SerializedName("user")
     private String userName;
@@ -30,6 +32,9 @@ public class Target {
 
     @SerializedName("root")
     private String deploymentRoot;
+
+    @SerializedName("roles")
+    private String[] roles;
 
     public String userName() {
         return userName;
@@ -45,5 +50,18 @@ public class Target {
 
     public String deploymentRoot() {
         return deploymentRoot;
+    }
+
+    public String[] roles() {
+        return roles;
+    }
+
+    public boolean hasAnyRole(String[] roles) {
+        return 0 != Arrays.stream(roles)
+                .filter(x -> Arrays.stream(this.roles)
+                        .anyMatch(y -> y.equals(x))
+                )
+                .toArray()
+                .length;
     }
 }

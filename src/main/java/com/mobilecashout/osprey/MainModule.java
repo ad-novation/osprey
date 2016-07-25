@@ -25,10 +25,10 @@ import com.mobilecashout.osprey.deployer.planner.ProjectActionPlanner;
 import com.mobilecashout.osprey.logger.LogOutputStreamImpl;
 import com.mobilecashout.osprey.plugin.PluginManager;
 import com.mobilecashout.osprey.provider.CommanderProvider;
+import com.mobilecashout.osprey.provider.DeploymentPlanManagerProvider;
 import com.mobilecashout.osprey.provider.LoggerProvider;
 import com.mobilecashout.osprey.provider.PluginManagerProvider;
 import com.rfksystems.commander.Commander;
-import com.mobilecashout.osprey.provider.DeploymentPlanManagerProvider;
 import org.apache.commons.exec.LogOutputStream;
 import org.apache.logging.log4j.Logger;
 
