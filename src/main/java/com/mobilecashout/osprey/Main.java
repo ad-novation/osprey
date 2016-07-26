@@ -23,16 +23,39 @@ import com.rfksystems.commander.exception.CommandUnknownException;
 import com.rfksystems.commander.exception.InputParseException;
 import com.rfksystems.commander.exception.NoCommandGivenException;
 import com.rfksystems.commander.exception.RuntimeArgumentException;
+import org.apache.logging.log4j.Logger;
+
+import java.net.JarURLConnection;
 
 public class Main {
+    private static final long SEC_IN_30D = 2592000;
+
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(new MainModule());
         Commander commander = injector.getInstance(Commander.class);
+
+        Long buildTime = getBuildTime();
+
+        if (null != buildTime && (System.currentTimeMillis() - buildTime) / 1000 > SEC_IN_30D) {
+            injector.getInstance(Logger.class).warn("This installation is more than 30 days old. Please, update via https://github.com/mobilecashout/osprey");
+        }
+
         try {
             int status = commander.execute(args);
             System.exit(status);
         } catch (NoCommandGivenException | CommandUnknownException | RuntimeArgumentException | InputParseException e) {
             e.printStackTrace();
+        }
+
+    }
+
+    private static Long getBuildTime() {
+        try {
+            String mainClassfile = Main.class.getName().replace('.', '/') + ".class";
+            JarURLConnection jarURLConnection = (JarURLConnection) ClassLoader.getSystemResource(mainClassfile).openConnection();
+            return jarURLConnection.getJarFile().getEntry("META-INF/MANIFEST.MF").getTime();
+        } catch (Exception e) {
+            return null;
         }
     }
 }
