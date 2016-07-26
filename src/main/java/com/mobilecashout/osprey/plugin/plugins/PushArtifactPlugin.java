@@ -21,6 +21,8 @@ import com.mobilecashout.osprey.deployer.DeploymentActionError;
 import com.mobilecashout.osprey.deployer.DeploymentContext;
 import com.mobilecashout.osprey.deployer.DeploymentPlan;
 import com.mobilecashout.osprey.plugin.PluginInterface;
+import com.mobilecashout.osprey.plugin.RolesUtil;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class PushArtifactPlugin implements PluginInterface {
     @Override
@@ -38,19 +40,26 @@ public class PushArtifactPlugin implements PluginInterface {
     @Override
     public DeploymentAction[] actionFromCommand(String command, DeploymentPlan deploymentPlan, DeploymentContext deploymentContext) throws DeploymentActionError {
         return new DeploymentAction[]{
-                new PushArtifactAction()
+                new PushArtifactAction(command)
         };
     }
 
     private class PushArtifactAction implements DeploymentAction {
+        private final ImmutablePair<String, String[]> commandRolePair;
+
+        PushArtifactAction(String command) {
+            this.commandRolePair = RolesUtil.parseCommandRoles(command);
+        }
+
         @Override
         public String getDescription() {
-            return "Upload artifact to all targets in parallel";
+            return String.format("Upload artifact to [%s] in parallel", String.join(",", (CharSequence[]) commandRolePair.getRight()));
         }
 
         @Override
         public void execute(DeploymentContext context) throws DeploymentActionError {
-            context.remoteClient().uploadArtifact(context);
+
+            context.remoteClient().uploadArtifact(context, commandRolePair.getRight());
         }
     }
 }

@@ -109,6 +109,23 @@ Plugins can accept arbitrary arguments to configure their behavior.
 Each plugin can have one of 3 possible scopes - local, remote or both. Effectively, it
 means that plugin will only be available on local stage, on remote stage, or both.
 
+#### Using roles
+
+Each target can have one or more roles, and each invocation of a plugin can be configured to run on one or more roled
+targets.
+
+**Important:** if no role is given for target, it is assumed to be part of a role called "all".
+
+**Important:** if at least one custom role is given for a target, this target is excluded from role "all". You must
+add role "all" manually for this target to be part of "all" again.
+
+**Important:** if no role is given for plugin invocation, it is assumed that it must be executed on all servers.
+
+
+#### Plugin call syntax
+
+`@NAME:role,role,role arg, arg, arg`
+
 #### Available plugins
 
 ##### `@clone <repo> <branch>`
@@ -138,7 +155,7 @@ Output the value in deployment log and on screen.
 
 Not implemented. Reserved for loading external task lists.
 
-##### `@shell <value>`
+##### `@shell[:role,...] <value>`
 
 *Stages: local, remote*
 
@@ -150,20 +167,20 @@ Run an arbitrary shell command in any given environment.
 
 Build artifact package (.tar.gz of working directory).
 
-##### `@pushArtifact`
+##### `@pushArtifact[:role,...]`
 
 *Stages: local*
 
 Upload build artifact to remotes for given target.
 
-##### `@release`
+##### `@release[:role,...]`
 
 *Stages: remote*
 
 Publish the current release. Effectively it means, make a symlink from `/current/` to
 `/releases/<current release>`.
 
-##### `@removeAllExcept <number>`
+##### `@removeAllExcept[:role,...] <number>`
 
 *Stages: remote*
 
@@ -268,7 +285,8 @@ Each application can have one build sequence composed of multiple build steps wi
                         "user": "{user}",
                         "host": "stage.example.com",
                         "port": 22,
-                        "root": "/var/www/test.com/"
+                        "root": "/var/www/test.com/",
+                        "roles": ["all", "web"]
                     }
                 ]
             },
@@ -281,7 +299,8 @@ Each application can have one build sequence composed of multiple build steps wi
                         "user": "{user}",
                         "host": "example.com",
                         "port": 22,
-                        "root": "/var/www/test.com/"
+                        "root": "/var/www/test.com/",
+                        "roles": ["all", "web"]
                     }
                 ]
             }

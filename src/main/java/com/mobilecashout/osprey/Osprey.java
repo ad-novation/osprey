@@ -17,13 +17,13 @@
 package com.mobilecashout.osprey;
 
 import com.google.inject.Inject;
-import com.mobilecashout.osprey.project.config.Project;
 import com.mobilecashout.osprey.deployer.DeploymentContext;
 import com.mobilecashout.osprey.deployer.DeploymentManager;
 import com.mobilecashout.osprey.exception.BaseException;
 import com.mobilecashout.osprey.project.ProjectCollectionLoader;
 import com.mobilecashout.osprey.project.ProjectConfigurationError;
 import com.mobilecashout.osprey.project.config.Environment;
+import com.mobilecashout.osprey.project.config.Project;
 import com.mobilecashout.osprey.project.config.ProjectCollection;
 import com.mobilecashout.osprey.remote.RemoteClient;
 import com.mobilecashout.osprey.remote.RemoteClientException;

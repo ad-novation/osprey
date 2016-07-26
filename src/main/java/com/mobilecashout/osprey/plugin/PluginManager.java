@@ -76,8 +76,12 @@ public class PluginManager {
                 }
 
                 String commandPart = "";
-                if (command.length() > hashName.length() + 1) {
-                    commandPart = command.substring(hashName.length() + 1);
+                if (command.length() > hashName.length()) {
+                    commandPart = command.substring(hashName.length());
+                }
+
+                if (!commandPart.startsWith(":")) {
+                    commandPart = commandPart.trim();
                 }
 
                 return new ImmutablePair<>(

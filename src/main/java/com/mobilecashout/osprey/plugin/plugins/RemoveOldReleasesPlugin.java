@@ -16,11 +16,13 @@
 
 package com.mobilecashout.osprey.plugin.plugins;
 
-import com.mobilecashout.osprey.plugin.PluginInterface;
 import com.mobilecashout.osprey.deployer.DeploymentAction;
 import com.mobilecashout.osprey.deployer.DeploymentActionError;
 import com.mobilecashout.osprey.deployer.DeploymentContext;
 import com.mobilecashout.osprey.deployer.DeploymentPlan;
+import com.mobilecashout.osprey.plugin.PluginInterface;
+import com.mobilecashout.osprey.plugin.RolesUtil;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class RemoveOldReleasesPlugin implements PluginInterface {
     @Override
@@ -43,20 +45,26 @@ public class RemoveOldReleasesPlugin implements PluginInterface {
     }
 
     private class RemoveOldReleasesAction implements DeploymentAction {
-        private final String command;
+        private final ImmutablePair<String, String[]> commandRolePair;
 
-        public RemoveOldReleasesAction(String command) {
-            this.command = command;
+        RemoveOldReleasesAction(String command) {
+            this.commandRolePair = RolesUtil.parseCommandRoles(command);
         }
 
         @Override
         public String getDescription() {
-            return String.format("Remove all but %s releases", command);
+            return String.format("Remove all but %s releases on roles [%s]", commandRolePair.getLeft(), String.join(",", (CharSequence[]) commandRolePair.getRight()));
         }
 
         @Override
         public void execute(DeploymentContext context) throws DeploymentActionError {
-            context.remoteClient().execute(String.format("cd {releases_root}; ls -tQ | tail -n+%s | xargs rm -rf", Integer.valueOf(command) + 1), context);
+            context
+                    .remoteClient()
+                    .execute(
+                            String.format("cd {releases_root}; ls -tQ | tail -n+%s | xargs rm -rf", Integer.valueOf(commandRolePair.getLeft()) + 1),
+                            context,
+                            commandRolePair.getRight()
+                    );
         }
     }
 }

@@ -16,11 +16,11 @@
 
 package com.mobilecashout.osprey.plugin.plugins;
 
-import com.mobilecashout.osprey.plugin.PluginInterface;
 import com.mobilecashout.osprey.deployer.DeploymentAction;
 import com.mobilecashout.osprey.deployer.DeploymentActionError;
 import com.mobilecashout.osprey.deployer.DeploymentContext;
 import com.mobilecashout.osprey.deployer.DeploymentPlan;
+import com.mobilecashout.osprey.plugin.PluginInterface;
 
 public class ExternalCommandListPlugin implements PluginInterface {
     @Override

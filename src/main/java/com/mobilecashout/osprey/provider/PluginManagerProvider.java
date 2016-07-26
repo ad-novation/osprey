@@ -18,8 +18,8 @@ package com.mobilecashout.osprey.provider;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.mobilecashout.osprey.plugin.plugins.*;
 import com.mobilecashout.osprey.plugin.PluginManager;
+import com.mobilecashout.osprey.plugin.plugins.*;
 
 public class PluginManagerProvider implements Provider<PluginManager> {
     @Inject

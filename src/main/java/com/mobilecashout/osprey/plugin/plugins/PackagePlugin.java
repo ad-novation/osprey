@@ -17,12 +17,12 @@
 package com.mobilecashout.osprey.plugin.plugins;
 
 import com.google.inject.Inject;
-import com.mobilecashout.osprey.deployer.actions.LocalShellAction;
-import com.mobilecashout.osprey.plugin.PluginInterface;
 import com.mobilecashout.osprey.deployer.DeploymentAction;
 import com.mobilecashout.osprey.deployer.DeploymentActionError;
 import com.mobilecashout.osprey.deployer.DeploymentContext;
 import com.mobilecashout.osprey.deployer.DeploymentPlan;
+import com.mobilecashout.osprey.deployer.actions.LocalShellAction;
+import com.mobilecashout.osprey.plugin.PluginInterface;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.LogOutputStream;
 

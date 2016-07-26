@@ -17,9 +17,9 @@
 package com.mobilecashout.osprey.remote;
 
 import com.jcraft.jsch.Session;
+import com.mobilecashout.osprey.deployer.DeploymentContext;
 import com.mobilecashout.osprey.project.config.Environment;
 import com.mobilecashout.osprey.project.config.Target;
-import com.mobilecashout.osprey.deployer.DeploymentContext;
 
 import java.util.HashMap;
 

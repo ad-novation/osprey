@@ -16,11 +16,13 @@
 
 package com.mobilecashout.osprey.plugin.plugins;
 
-import com.mobilecashout.osprey.plugin.PluginInterface;
 import com.mobilecashout.osprey.deployer.DeploymentAction;
 import com.mobilecashout.osprey.deployer.DeploymentActionError;
 import com.mobilecashout.osprey.deployer.DeploymentContext;
 import com.mobilecashout.osprey.deployer.DeploymentPlan;
+import com.mobilecashout.osprey.plugin.PluginInterface;
+import com.mobilecashout.osprey.plugin.RolesUtil;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class ReleasePlugin implements PluginInterface {
     @Override
@@ -38,19 +40,26 @@ public class ReleasePlugin implements PluginInterface {
     @Override
     public DeploymentAction[] actionFromCommand(String command, DeploymentPlan deploymentPlan, DeploymentContext deploymentContext) throws DeploymentActionError {
         return new DeploymentAction[]{
-                new ReleaseAction()
+                new ReleaseAction(command)
         };
     }
 
     private class ReleaseAction implements DeploymentAction {
+        private final ImmutablePair<String, String[]> commandRolePair;
+
+        ReleaseAction(String command) {
+            this.commandRolePair = RolesUtil.parseCommandRoles(command);
+        }
+
         @Override
         public String getDescription() {
-            return "Symlink current release in parallel on all servers";
+            return String.format("Symlink current release in parallel on [%s]", String.join(",", (CharSequence[]) commandRolePair.getRight()));
         }
 
         @Override
         public void execute(DeploymentContext context) throws DeploymentActionError {
-            context.remoteClient().symlinkCurrentRelease(context);
+
+            context.remoteClient().symlinkCurrentRelease(context, commandRolePair.getRight());
         }
     }
 }

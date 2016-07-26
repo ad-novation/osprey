@@ -21,9 +21,9 @@ import com.jcraft.jsch.agentproxy.AgentProxyException;
 import com.jcraft.jsch.agentproxy.Connector;
 import com.jcraft.jsch.agentproxy.ConnectorFactory;
 import com.jcraft.jsch.agentproxy.RemoteIdentityRepository;
-import com.mobilecashout.osprey.project.config.Environment;
 import com.mobilecashout.osprey.deployer.DeploymentActionError;
 import com.mobilecashout.osprey.deployer.DeploymentContext;
+import com.mobilecashout.osprey.project.config.Environment;
 import com.mobilecashout.osprey.project.config.Target;
 import org.apache.commons.exec.LogOutputStream;
 import org.apache.logging.log4j.Logger;
@@ -100,7 +100,7 @@ public class RemoteClient {
     }
 
 
-    private synchronized void executeInParallel(RemoteRunnable runnable, DeploymentContext context) {
+    private synchronized void executeInParallel(RemoteRunnable runnable, DeploymentContext context, String[] roles) {
 
         while (!semaphore.tryAcquire()) {
             try {
@@ -115,6 +115,9 @@ public class RemoteClient {
         final ArrayList<Future<Boolean>> futures = new ArrayList<>();
 
         for (RemoteTarget remoteTarget : sessions) {
+            if (!remoteTarget.getTarget().hasAnyRole(roles)) {
+                continue;
+            }
             Future<Boolean> executor = pool.submit(() -> {
                 runnable.run(remoteTarget, context);
                 return true;
@@ -139,6 +142,10 @@ public class RemoteClient {
     }
 
     public void uploadArtifact(DeploymentContext context) {
+        uploadArtifact(context, new String[]{"all"});
+    }
+
+    public void uploadArtifact(DeploymentContext context, String[] roles) {
         executeInParallel(new RemoteRunnable() {
             @Override
             public void run(RemoteTarget remoteTarget, DeploymentContext context) throws DeploymentActionError {
@@ -208,7 +215,7 @@ public class RemoteClient {
                     }
                 }
             }
-        }, context);
+        }, context, roles);
     }
 
     public void tryDisconnect() {
@@ -218,6 +225,10 @@ public class RemoteClient {
     }
 
     public void symlinkCurrentRelease(DeploymentContext context) {
+        symlinkCurrentRelease(context, new String[]{"all"});
+    }
+
+    public void symlinkCurrentRelease(DeploymentContext context, String[] roles) {
         executeInParallel((remoteTarget, innerContext) -> {
             try {
                 Target target = remoteTarget.getTarget();
@@ -252,10 +263,10 @@ public class RemoteClient {
             } catch (JSchException | SftpException | InterruptedException e) {
                 throw new DeploymentActionError(e);
             }
-        }, context);
+        }, context, roles);
     }
 
-    public synchronized void execute(String command, DeploymentContext context) {
+    public synchronized void execute(String command, DeploymentContext context, String[] roles) {
         executeInParallel((remoteTarget, innerContext) -> {
             try {
                 final ChannelExec exec = (ChannelExec) remoteTarget.getSession().openChannel("exec");
@@ -288,6 +299,10 @@ public class RemoteClient {
             } catch (JSchException | InterruptedException e) {
                 throw new DeploymentActionError(e);
             }
-        }, context);
+        }, context, roles);
+    }
+
+    public void execute(String command, DeploymentContext deploymentContext) {
+        execute(command, deploymentContext, new String[]{"all"});
     }
 }

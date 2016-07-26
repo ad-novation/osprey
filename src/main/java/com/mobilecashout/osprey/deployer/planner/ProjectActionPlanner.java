@@ -18,14 +18,14 @@ package com.mobilecashout.osprey.deployer.planner;
 
 import com.google.inject.Inject;
 import com.mobilecashout.osprey.deployer.BuildPlanner;
-import com.mobilecashout.osprey.plugin.PluginInterface;
-import com.mobilecashout.osprey.project.config.BuildCommand;
-import com.mobilecashout.osprey.project.config.BuildRoot;
 import com.mobilecashout.osprey.deployer.DeploymentAction;
 import com.mobilecashout.osprey.deployer.DeploymentContext;
 import com.mobilecashout.osprey.deployer.DeploymentPlan;
+import com.mobilecashout.osprey.plugin.PluginInterface;
 import com.mobilecashout.osprey.plugin.PluginManager;
 import com.mobilecashout.osprey.project.ProjectConfigurationError;
+import com.mobilecashout.osprey.project.config.BuildCommand;
+import com.mobilecashout.osprey.project.config.BuildRoot;
 
 import java.util.ArrayList;
 import java.util.Collections;

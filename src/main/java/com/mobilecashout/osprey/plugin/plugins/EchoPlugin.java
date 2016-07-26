@@ -17,12 +17,11 @@
 package com.mobilecashout.osprey.plugin.plugins;
 
 import com.google.inject.Inject;
-import com.mobilecashout.osprey.plugin.PluginInterface;
-import com.mobilecashout.osprey.util.Substitutor;
 import com.mobilecashout.osprey.deployer.DeploymentAction;
 import com.mobilecashout.osprey.deployer.DeploymentActionError;
 import com.mobilecashout.osprey.deployer.DeploymentContext;
 import com.mobilecashout.osprey.deployer.DeploymentPlan;
+import com.mobilecashout.osprey.plugin.PluginInterface;
 import org.apache.logging.log4j.Logger;
 
 public class EchoPlugin implements PluginInterface {
@@ -45,17 +44,15 @@ public class EchoPlugin implements PluginInterface {
     @Override
     public DeploymentAction[] actionFromCommand(String command, DeploymentPlan deploymentPlan, DeploymentContext deploymentContext) {
         return new DeploymentAction[]{
-                new EchoAction(command, logger, deploymentContext.substitutor())
+                new EchoAction(command)
         };
     }
 
     private class EchoAction implements DeploymentAction {
         private final String command;
-        private final Substitutor substitutor;
 
-        public EchoAction(String command, Logger logger, Substitutor substitutor) {
-            this.command = substitutor.replace(command);
-            this.substitutor = substitutor;
+        EchoAction(String command) {
+            this.command = command;
         }
 
         @Override
@@ -65,7 +62,7 @@ public class EchoPlugin implements PluginInterface {
 
         @Override
         public void execute(DeploymentContext context) throws DeploymentActionError {
-            logger.debug(command);
+            logger.debug(context.substitutor().replace(command));
         }
     }
 }
