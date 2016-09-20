@@ -101,7 +101,9 @@ public class RemoteClient {
 
 
     private synchronized void executeInParallel(RemoteRunnable runnable, DeploymentContext context, String[] roles) {
-
+        if (null == roles) {
+            roles = new String[]{"all"};
+        }
         while (!semaphore.tryAcquire()) {
             try {
                 Thread.sleep(100);

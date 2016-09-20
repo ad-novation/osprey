@@ -323,8 +323,8 @@ Each application can have one build sequence composed of multiple build steps wi
             },
             "remote": {
                 "prepare": [
-                    "@pushArtifact",
-                    "@removeAllExcept 3"
+                    "@pushArtifact:all",
+                    "@removeAllExcept:all 3"
                 ],
                 "success": [
                     "@release"
