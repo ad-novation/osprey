@@ -56,9 +56,15 @@ public class Target {
         return roles;
     }
 
-    public boolean hasAnyRole(String[] roles) {
-        return 0 != Arrays.stream(roles)
-                .filter(x -> Arrays.stream(this.roles)
+    public boolean hasAnyRole(String[] rolesToCheck) {
+        if (null == this.roles) {
+            return Arrays
+                    .stream(rolesToCheck)
+                    .anyMatch(y -> y.equals("all"));
+        }
+        return 0 != Arrays.stream(rolesToCheck)
+                .filter(x -> Arrays
+                        .stream(this.roles)
                         .anyMatch(y -> y.equals(x))
                 )
                 .toArray()
