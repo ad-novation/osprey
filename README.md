@@ -1,5 +1,13 @@
 #Osprey
 
+### This project is inactive
+
+Osprey was an internal experiment of MobileCashout. It was a tool meant to replace aging Capistrano based infrastructure with something tailored to our specific needs, however, after trying it out for a couple of projects and considering the alternatives we opted instead to use [Fabric](http://www.fabfile.org) for our deployment and automation needs.
+
+This project will remain here, free for whoever finds it useful, but will not receive any further updates or support.
+
+-------------------
+
 Simple application deployment tool written in Java with Capistrano compatible layout.
 
 ![Osprey](./deployment/osprey.medium.png "Osprey")
